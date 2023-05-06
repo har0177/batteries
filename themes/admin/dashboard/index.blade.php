@@ -122,6 +122,10 @@
 		 table.dataTable({
 			 autoWidth: true,
 			 ordering: false,
+		 dom: 'Bfrtip',
+		 buttons: [
+			 'copy', 'csv', 'excel', 'pdf', 'print'
+		 ],
 			 ajax: {
 				 url: "{{route('dashboard.ajax')}}",
 				 type: 'post'
