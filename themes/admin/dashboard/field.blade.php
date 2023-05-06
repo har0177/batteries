@@ -63,7 +63,11 @@
 	 $(document).ready(function () {
 		 table.dataTable({
 			 autoWidth: true,
-			 ordering: false
+			 ordering: false,
+		 dom: 'Bfrtip',
+		 buttons: [
+			 'copy', 'csv', 'excel', 'pdf', 'print'
+		 ]
 		 })
 	 })
 

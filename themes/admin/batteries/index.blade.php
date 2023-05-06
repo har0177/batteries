@@ -19,6 +19,10 @@
 		 table = $('#table-batteries').dataTable({
 			 autoWidth: true,
 			 ordering: false,
+		 dom: 'Bfrtip',
+		 buttons: [
+			 'copy', 'csv', 'excel', 'pdf', 'print'
+		 ],
 			 ajax: {
 				 url: "{{route('batteries.ajax')}}",
 				 type: 'post'

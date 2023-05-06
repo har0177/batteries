@@ -37,15 +37,11 @@ class DashboardController extends Controller
     $batteries = Battery::all();
     $data = [];
     foreach( $batteries as $battery ) {
-      $statusInField = BatteryUser::with( [ 'battery', 'to', 'by' ] )->where( 'battery_id', $battery->id )
-                                  ->where( 'issued_to', '!=', 51 )->orderBy( 'id', 'DESC' )->first();
-      
-      $statusInCamp = BatteryUser::where( 'battery_id', $battery->id )
-                                 ->where( 'issued_to', 51 )->orderBy( 'id', 'DESC' )->first();
-      if( $statusInCamp && $statusInField ) {
-        if( $statusInField->created_at > $statusInCamp->created_at ) {
-          $data[] = $statusInField;
-        }
+      $status = BatteryUser::with( [ 'battery', 'to', 'by' ] )->where( 'battery_id', $battery->id )
+        ->latest()->first();
+  
+      if( !empty( $status ) && $status->type === 'Field' ) {
+        $data[] = $status;
       }
     }
     
@@ -57,16 +53,25 @@ class DashboardController extends Controller
   {
     $batteries = Battery::all();
     $data = [];
-    foreach( $batteries as $battery ) {
+   /* foreach( $batteries as $battery ) {
       $statusInField = BatteryUser::with( [ 'battery', 'to', 'by' ] )->where( 'battery_id', $battery->id )
-                                  ->where( 'issued_to', '!=', 51 )->orderBy( 'id', 'DESC' )->first();
-      
+                                  ->where( 'type', 'Camp' )->orderBy( 'id', 'DESC' )->first();
+  
       $statusInCamp = BatteryUser::where( 'battery_id', $battery->id )
-                                 ->where( 'issued_to', 51 )->orderBy( 'id', 'DESC' )->first();
+                                 ->where( 'type', 'Field' )->orderBy( 'id', 'DESC' )->first();
       if( $statusInCamp && $statusInField ) {
         if( $statusInField->created_at < $statusInCamp->created_at ) {
           $data[] = $statusInCamp;
         }
+      }
+    }*/
+  
+    foreach( $batteries as $battery ) {
+      $status = BatteryUser::with( [ 'battery', 'to', 'by' ] )->where( 'battery_id', $battery->id )
+                           ->latest()->first();
+    
+      if( !empty( $status ) && $status->type === 'Camp' ) {
+        $data[] = $status;
       }
     }
     
